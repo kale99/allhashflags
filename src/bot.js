@@ -133,9 +133,9 @@ function fetchFeeds() {
    // }); //getFeed
 }
 
-//var time = 300000;
+var time = 3000000;
 
-var time = 10000;
+//var time = 10000;
 
 //Fetching the feed occurs according to frequency indicated in time
 setInterval(fetchFeeds, time);
