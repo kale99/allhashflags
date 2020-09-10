@@ -130,7 +130,7 @@ function fetchFeeds() {
     //   } else {
     //     console.log("FeedParser errors, get feed didnt work");
     //   }
-    }); //getFeed
+   // }); //getFeed
 }
 
 //var time = 300000;
