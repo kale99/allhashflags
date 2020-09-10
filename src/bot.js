@@ -36,7 +36,7 @@ var download = function(uri, filename, callback) {
 function fetchFeeds() {
   
     getFeed('https://pbs.twimg.com/hashflag/config-2020-09-08.json').then((body) => { 
-        console.log(body[69])
+        console.log(body[1])
 
         //T.post('statuses/update', { status: body[69] }, (err, data, response) => {console.log(data)})
 
