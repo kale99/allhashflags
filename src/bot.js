@@ -37,9 +37,10 @@ function fetchFeeds() {
   
     getFeed('https://pbs.twimg.com/hashflag/config-2020-09-08.json', function(err, feedItems) {
       if (!err) {
-        for (var i = 0; i < feedItems.length; i++) {
+        
 
             console.log(feedItems);
+            T.post('statuses/update', { status: 'hello world!' }, (err, data, response) => {console.log(data)})
          
             // urlSet.add(feedItems[i].link);
             
@@ -121,7 +122,7 @@ function fetchFeeds() {
 
             //   //console.log(newsStory + ".\n");
             // }); //get ImageURL
-        } //forFeedItems
+         //forFeedItems
 
         //reset Buffer
         if (urlSet.size == 10000) {
