@@ -24,7 +24,7 @@ function slowIterate(array,count){
 
     let arr = array[count]
     status = `hashflag alert!: #${arr.hashtag}, this hashflag is available from ${new Date(parseInt(arr.startingTimestampMs)).toLocaleDateString("en-US", options)} to ${new Date(parseInt(arr.endingTimestampMs)).toLocaleDateString("en-US", options)}`
-    //T.post('statuses/update', { status: status }, (err, data, response) => {console.log(data)})
+    T.post('statuses/update', { status: status }, (err, data, response) => {console.log(data)})
     console.log({status,arr})
     count--;
 
