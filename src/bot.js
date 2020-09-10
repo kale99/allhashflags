@@ -6,7 +6,7 @@ const getFeed = require("./getFeed");
 const today = new Date();
 const dateFormatted = `${today.getFullYear()}-${(today.getMonth()+1).toString().padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
 
-var time = 3000000;
+var time = 300000;
 //var time = 10000;
 
 const T = new Twit(config);
@@ -16,7 +16,7 @@ const T = new Twit(config);
 var http = require("http");
 setInterval(function() {
   http.get("http://allhashflags.herokuapp.com");
-}, 300000); // every 5 minutes (300000)
+}, time); // every 5 minutes (300000)
 
 var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
