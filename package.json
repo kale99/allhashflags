@@ -1,0 +1,28 @@
+{
+  "name": "allhashflags",
+  "version": "1.0.0",
+  "description": "all hashflags avail on twitter",
+  "main": "index.js",
+  "scripts": {
+    "test": "",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luvi/allhashflags.git"
+  },
+  "keywords": [
+    "twitter"
+  ],
+  "author": "Janique-ka John",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luvi/allhashflags/issues"
+  },
+  "homepage": "https://github.com/luvi/allhashflags#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "twit": "^2.2.11"
+  }
+}
