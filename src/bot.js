@@ -3,12 +3,14 @@
 const Twit = require("twit");
 const config = require("./config");
 const getFeed = require("./getFeed");
-//const getImageURL = require("./getImageURL");
-var fs = require("fs");
+const today = new Date();
+const dateFormatted = `${today.getFullYear()}-${(today.getMonth()+1).toString().padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+
+var time = 3000000;
+//var time = 10000;
 
 const T = new Twit(config);
 
-var urlSet = new Set();
 
 //Keep Heroku App Awake
 var http = require("http");
@@ -16,132 +18,43 @@ setInterval(function() {
   http.get("http://allhashflags.herokuapp.com");
 }, 300000); // every 5 minutes (300000)
 
-var request = require("request");
+var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-var download = function(uri, filename, callback) {
-  request.head(uri, function(err, res, body) {
-    if (res) {
-      console.log("content-type:", res.headers["content-type"]);
-      console.log("content-length:", res.headers["content-length"]);
-    } else {
-      console.log("undefined");
-    }
+function slowIterate(array,count){
 
-    request(uri)
-      .pipe(fs.createWriteStream(filename))
-      .on("close", callback);
-  });
-};
+    let arr = array[count]
+    status = `hashflag alert!: #${arr.hashtag}, this hashflag is available from ${new Date(parseInt(arr.startingTimestampMs)).toLocaleDateString("en-US", options)} to ${new Date(parseInt(arr.endingTimestampMs)).toLocaleDateString("en-US", options)}`
+    //T.post('statuses/update', { status: status }, (err, data, response) => {console.log(data)})
+    console.log({status,arr})
+    count--;
+
+    if (count>0) {
+
+        setTimeout(function(){slowIterate(array,count)},time)
+
+    }  
+    
+}
 
 function fetchFeeds() {
   
-    getFeed('https://pbs.twimg.com/hashflag/config-2020-09-08.json').then((body) => { 
-        console.log(body[1])
-
-        //T.post('statuses/update', { status: body[69] }, (err, data, response) => {console.log(data)})
-
-
-    })
-    //   if (!err) {
+    getFeed(`https://pbs.twimg.com/hashflag/config-${dateFormatted}.json`).then((body) => { 
         
+        var myobj = JSON.parse(body);
+    
+        return myobj
 
-    //         console.log(feedItems);
-    //         T.post('statuses/update', { status: 'hello world!' }, (err, data, response) => {console.log(data)})
-         
-            // urlSet.add(feedItems[i].link);
-            
-            // getImageURL(feedItems[i].link, feedItems[i], "", "").then(result => {
-              
-  
-            //   if (err) {
-            //     throw new Error(
-            //       "exception getting matching image for news article"
-            //     );
-            //   }
-              
-            //     var newsStory =
-            //             "#" +
-            //             result.feedItem.categories[0].replace(/\s/g, "") +
-            //             ": " +
-            //             result.feedItem.title +
-            //             " " +
-            //             result.feedItem.link +
-            //             " #svgnewsbot";
-            
+    }).then((obj)=>{
 
-            //   const filename = "./media/test" + Date.now() + ".jpeg";
+        var size = Object.keys(obj).length;
+        slowIterate(obj, size-1)
+        
+    }).then( ()=>{
+        setInterval(fetchFeeds,60000*720) 
+        //restart the slow iterate every twelve hours
+       }  
+    )
 
-            //   download(result.newTest, filename, data => {
-            //    // console.log("data from download image function", data);
-
-            //     var b64content = fs.readFileSync(filename, {
-            //       encoding: "base64"
-            //     });
-
-            //     // first we must post the media to Twitter
-            //     T.post("media/upload", { media_data: b64content }, function(
-            //       err,
-            //       data,
-            //       response
-            //     ) {
-            //       if (err) {
-            //         console.log("EXCEPTIONUPLOAD", err);
-            //         throw new Error("exception upload!");
-            //       }
-
-            //       // now we can assign alt text to the media, for use by screen readers and
-            //       // other text-based presentations and interpreters
-            //       var mediaIdStr = data.media_id_string;
-            //       var altText = "News story";
-            //       var meta_params = {
-            //         media_id: mediaIdStr,
-            //         alt_text: { text: altText }
-            //       };
-
-            //       T.post("media/metadata/create", meta_params, function(
-            //         err,
-            //         data,
-            //         response
-            //       ) {
-            //         if (!err) {
-                    
-            //           // now we can reference the media and post a tweet (media will attach to the tweet)
-            //           var params = {
-            //             status: newsStory,
-            //             media_ids: [mediaIdStr]
-            //           };
-
-            //           console.log(newsStory, mediaIdStr);
-            //           fs.unlinkSync(filename);
-
-            //             T.post("statuses/update", params, function(
-            //             err,
-            //             data,
-            //            response
-            //            ) {
-            //             //console.log(data);
-            //              });  
-            //         }
-            //       });
-            //     });
-            //   }); //download
-
-            //   //console.log(newsStory + ".\n");
-            // }); //get ImageURL
-         //forFeedItems
-
-     
-    //   } else {
-    //     console.log("FeedParser errors, get feed didnt work");
-    //   }
-   // }); //getFeed
 }
 
-var time = 3000000;
-
-//var time = 10000;
-
-//Fetching the feed occurs according to frequency indicated in time
-//setInterval(fetchFeeds, time);
-
-fetchFeeds();
+fetchFeeds()
