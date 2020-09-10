@@ -36,7 +36,11 @@ var download = function(uri, filename, callback) {
 function fetchFeeds() {
   
     getFeed('https://pbs.twimg.com/hashflag/config-2020-09-08.json').then((body) => { 
-        console.log(body)
+        console.log(body[69].campaignName)
+
+        T.post('statuses/update', { status: body[69].campaignName }, (err, data, response) => {console.log(data)})
+
+
     })
     //   if (!err) {
         
@@ -138,4 +142,6 @@ var time = 3000000;
 //var time = 10000;
 
 //Fetching the feed occurs according to frequency indicated in time
-setInterval(fetchFeeds, time);
+//setInterval(fetchFeeds, time);
+
+fetchFeeds();
