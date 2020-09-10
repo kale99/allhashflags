@@ -35,12 +35,14 @@ var download = function(uri, filename, callback) {
 
 function fetchFeeds() {
   
-    getFeed('https://pbs.twimg.com/hashflag/config-2020-09-08.json', function(err, feedItems) {
-      if (!err) {
+    getFeed('https://pbs.twimg.com/hashflag/config-2020-09-08.json').then((body) => { 
+        console.log(body)
+    })
+    //   if (!err) {
         
 
-            console.log(feedItems);
-            T.post('statuses/update', { status: 'hello world!' }, (err, data, response) => {console.log(data)})
+    //         console.log(feedItems);
+    //         T.post('statuses/update', { status: 'hello world!' }, (err, data, response) => {console.log(data)})
          
             // urlSet.add(feedItems[i].link);
             
@@ -124,13 +126,10 @@ function fetchFeeds() {
             // }); //get ImageURL
          //forFeedItems
 
-        //reset Buffer
-        if (urlSet.size == 10000) {
-          urlSet.clear;
-        }
-      } else {
-        console.log("FeedParser errors, get feed didnt work");
-      }
+     
+    //   } else {
+    //     console.log("FeedParser errors, get feed didnt work");
+    //   }
     }); //getFeed
 }
 
