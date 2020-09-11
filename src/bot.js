@@ -16,21 +16,22 @@ const T = new Twit(config);
 var http = require("http");
 setInterval(function() {
   http.get("http://allhashflags.herokuapp.com");
-}, time); // every 5 minutes (300000)
+}, 300000); // every 5 minutes (300000)
 
 var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-function slowIterate(array,count){
+function slowIterate(array,count,maxLength){
 
     let arr = array[count]
-    status = `hashflag alert!: #${arr.hashtag}, this hashflag is available from ${new Date(parseInt(arr.startingTimestampMs)).toLocaleDateString("en-US", options)} to ${new Date(parseInt(arr.endingTimestampMs)).toLocaleDateString("en-US", options)}`
+    status = `hashflag alert: #${arr.hashtag} 
+    Available from ${new Date(parseInt(arr.startingTimestampMs)).toLocaleDateString("en-US", options)} to ${new Date(parseInt(arr.endingTimestampMs)).toLocaleDateString("en-US", options)}`
     T.post('statuses/update', { status: status }, (err, data, response) => {console.log(data)})
     console.log({status,arr})
-    count--;
+    count++;
 
-    if (count>0) {
+    if (count<=maxLength) {
 
-        setTimeout(function(){slowIterate(array,count)},time)
+        setTimeout(function(){slowIterate(array,count,maxLength)},time)
 
     }  
     
@@ -47,11 +48,11 @@ function fetchFeeds() {
     }).then((obj)=>{
 
         var size = Object.keys(obj).length;
-        slowIterate(obj, size-1)
+        slowIterate(obj, 0, size-1)
         
-    }).then( ()=>{
-        setInterval(fetchFeeds,60000*720) 
-        //restart the slow iterate every twelve hours
+    }).then(()=>{
+        setInterval(fetchFeeds,60000*1440) 
+        //restart the slow iterate every twenty four hours
        }  
     )
 
